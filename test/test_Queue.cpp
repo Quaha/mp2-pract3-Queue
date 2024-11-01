@@ -209,8 +209,8 @@ TEST(Queue, combination_of_push_and_pop_2) {
 TEST(Queue, stress_test) {
     srand(time(0));
 
-    int COUNT_OF_TESTS = 100;
-    int ACTIONS_PER_TEST = 1000;
+    int COUNT_OF_TESTS = 1000;
+    int ACTIONS_PER_TEST = 10000;
 
     for (int CURR_TEST_CASE = 0; CURR_TEST_CASE < COUNT_OF_TESTS; CURR_TEST_CASE++) {
         Queue<int> queue;

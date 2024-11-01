@@ -16,10 +16,10 @@ private:
 
 	void construct(Queue* queue) {
 		queue->data = new QueueType[1]();
-		front_ptr = 0;
-		end_ptr = 0;
-		sz = 0;
-		capacity = 1;
+		queue->front_ptr = 0;
+		queue->end_ptr = 0;
+		queue->sz = 0;
+		queue->capacity = 1;
 	}
 
 public:
@@ -41,7 +41,7 @@ public:
 		this->capacity = other.capacity;
 
 		this->data = new QueueType[capacity]();
-		if (front_ptr <= end_ptr) {
+		if (front_ptr < end_ptr) {
 			for (int i = front_ptr; i < end_ptr; ++i) {
 				this->data[i] = other.data[i];
 			}
@@ -80,7 +80,7 @@ public:
 		this->capacity = other.capacity;
 
 		this->data = new QueueType[capacity]();
-		if (front_ptr <= end_ptr) {
+		if (front_ptr < end_ptr) {
 			for (int i = front_ptr; i < end_ptr; ++i) {
 				this->data[i] = other.data[i];
 			}
@@ -117,14 +117,21 @@ public:
 
 	void push(const QueueType& value) {
 		data[end_ptr] = value;
+
+		++end_ptr;
+		if (end_ptr == capacity) {
+			end_ptr = 0;
+		}
+
 		++sz;
 
 		if (sz == capacity) {
 			capacity *= 2;
 			QueueType* new_data = new QueueType[capacity]();
 			
-			for (int i = 0, p = front_ptr; i < sz; i++, front_ptr++, front_ptr %= sz) {
-				new_data[i] = data[p];
+			for (int i = 0, p = front_ptr; i < sz; i++, p++, p %= sz) {
+				int V = data[p];
+				new_data[i] =V;
 			}
 
 			front_ptr = 0;
@@ -137,9 +144,10 @@ public:
 
 	void pop() {
 		if (empty()) {
-			throw std::out_of_range("It is forbidden to use the method .pop_back() on an empty queue!");
+			throw std::out_of_range("It is forbidden to use the method .pop() on an empty queue!");
 		}
 		front_ptr++;
+		--sz;
 		if (front_ptr == capacity) {
 			front_ptr = 0;
 		}
@@ -147,7 +155,7 @@ public:
 
 	QueueType front() const {
 		if (empty()) {
-			throw std::out_of_range("It is forbidden to use the method .back() on an empty queue!");
+			throw std::out_of_range("It is forbidden to use the method .front() on an empty queue!");
 		}
 		return data[front_ptr];
 	}
